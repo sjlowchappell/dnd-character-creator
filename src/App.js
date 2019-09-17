@@ -99,10 +99,42 @@ class App extends Component {
 		super();
 		this.state = {
 			name: '',
-			class: '',
-			race: '',
-			abilityScores: [],
-			racialBonus: [],
+			class: {
+				name: '',
+				level: {},
+			},
+			race: {
+				name: '',
+			},
+			abilities: {
+				initialRolls: [],
+				totalScores: [],
+				skills: [],
+			},
+			description: {
+				alignment: '',
+				background: '',
+				traits: [],
+				ideals: [],
+				bonds: [],
+				flaws: [],
+			},
+			equipment: {
+				equipped: {
+					armor: '',
+					weapons: [],
+				},
+				inventory: {},
+			},
+			misc: {
+				otherProficiencies: [],
+				languages: [],
+				features: [],
+				traits: [],
+			},
+			hp: 0,
+			xp: 0,
+			insp: false,
 		};
 	}
 	handleClick = e => {
@@ -110,22 +142,25 @@ class App extends Component {
 		const stateUpdate = e.target.innerText;
 		if (stateName === 'class') {
 			this.setState({
-				class: stateUpdate,
+				class: { name: stateUpdate },
 			});
 		} else if (stateName === 'race') {
 			this.setState({
-				race: stateUpdate,
+				race: { name: stateUpdate },
 			});
 		}
 	};
 	getAbilities = () => {
-		if (this.state.abilityScores.length < 6) {
-			console.log('clicked!');
-			const abilityScores = this.state.abilityScores;
+		if (this.state.abilities.initialRolls.length < 6) {
+			const rolls = this.state.abilities.initialRolls;
 			const diceRoll = Math.ceil(Math.random() * 20);
-			abilityScores.push(diceRoll);
+			rolls.push(diceRoll);
 			this.setState({
-				abilityScores: abilityScores,
+				abilities: {
+					initialRolls: rolls,
+					totalScores: [],
+					skills: [],
+				},
 			});
 		} else {
 			console.log('All abilities rolled for!');
@@ -145,9 +180,7 @@ class App extends Component {
 				<h1>DND Character Creator</h1>
 				<CharacterCustomizer name={'Class'} onClick={this.handleClick} list={classes} />
 				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
-
-				<button>Move on to Next Step</button>
-				<Abilities onClick={this.getAbilities} abilities={this.state.abilityScores} />
+				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
 
 				<label htmlFor="name">Name</label>
 				<input onChange={this.charName} type="text" id="name" />
