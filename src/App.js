@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 import CharacterCustomizer from './components/CharacterCustomizer';
 import Abilities from './components/Abilities';
+import Description from './components/Description';
 // const url = 'http://dnd5eapi.co/api/';
 
 const races = [
@@ -98,7 +99,6 @@ class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			name: '',
 			class: {
 				name: '',
 				level: {},
@@ -108,17 +108,29 @@ class App extends Component {
 			},
 			abilities: {
 				initialRolls: [],
-				totalScores: [],
+				totalScores: [
+					{ name: 'strength', value: 0 },
+					{ name: 'dexterity', value: 0 },
+					{ name: 'constitution', value: 0 },
+					{ name: 'intelligence', value: 0 },
+					{ name: 'wisdom', value: 0 },
+					{ name: 'charisma', value: 0 },
+				],
 				skills: [],
 			},
-			description: {
-				alignment: '',
-				background: '',
-				traits: [],
-				ideals: [],
-				bonds: [],
-				flaws: [],
-			},
+			description: [
+				{ descriptor: 'name', value: '' },
+				{ descriptor: 'age', value: '' },
+				{ descriptor: 'eyes', value: '' },
+				{ descriptor: 'weight', value: '' },
+				{ descriptor: 'hair', value: '' },
+				{ descriptor: 'alignment', value: '' },
+				{ descriptor: 'background', value: '' },
+				{ descriptor: 'traits', value: '' },
+				{ descriptor: 'ideals', value: '' },
+				{ descriptor: 'bonds', value: '' },
+				{ descriptor: 'flaws', value: '' },
+			],
 			equipment: {
 				equipped: {
 					armor: '',
@@ -140,37 +152,39 @@ class App extends Component {
 	handleClick = e => {
 		const stateName = e.target.classList.value;
 		const stateUpdate = e.target.innerText;
-		if (stateName === 'class') {
-			this.setState({
-				class: { name: stateUpdate },
-			});
-		} else if (stateName === 'race') {
-			this.setState({
-				race: { name: stateUpdate },
-			});
-		}
+		this.setState({
+			[stateName]: { name: stateUpdate },
+		});
 	};
 	getAbilities = () => {
 		if (this.state.abilities.initialRolls.length < 6) {
 			const rolls = this.state.abilities.initialRolls;
 			const diceRoll = Math.ceil(Math.random() * 20);
 			rolls.push(diceRoll);
-			this.setState({
+			this.setState(prevState => ({
 				abilities: {
+					...prevState.abilities,
 					initialRolls: rolls,
-					totalScores: [],
-					skills: [],
 				},
-			});
+			}));
 		} else {
 			console.log('All abilities rolled for!');
 		}
 	};
 
 	charName = e => {
-		// console.log(e.target.value);
 		this.setState({
 			name: e.target.value,
+		});
+	};
+	charDescription = e => {
+		const description = this.state.description;
+		const index = e.target.parentElement.getAttribute('data-index');
+		const value = e.target.value;
+		const descriptor = this.state.description[index].descriptor;
+		description[index] = { descriptor, value };
+		this.setState({
+			description: description,
 		});
 	};
 
@@ -182,8 +196,12 @@ class App extends Component {
 				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
 
-				<label htmlFor="name">Name</label>
-				<input onChange={this.charName} type="text" id="name" />
+				<h2>Describe Your Character:</h2>
+				{this.state.description.map((item, index) => {
+					return <Description onChange={this.charDescription} title={item.descriptor} index={index} />;
+				})}
+
+				{/* <Description onChange={this.charDescription} title={'age'} /> */}
 			</div>
 		);
 	}
