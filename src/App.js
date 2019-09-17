@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import axios from 'axios';
 import './App.css';
 import CharacterCustomizer from './components/CharacterCustomizer';
+import Abilities from './components/Abilities';
 // const url = 'http://dnd5eapi.co/api/';
 
 const races = [
@@ -100,6 +101,8 @@ class App extends Component {
 			name: '',
 			class: '',
 			race: '',
+			abilityScores: [],
+			racialBonus: [],
 		};
 	}
 	handleClick = e => {
@@ -115,6 +118,26 @@ class App extends Component {
 			});
 		}
 	};
+	getAbilities = () => {
+		if (this.state.abilityScores.length < 6) {
+			console.log('clicked!');
+			const abilityScores = this.state.abilityScores;
+			const diceRoll = Math.ceil(Math.random() * 20);
+			abilityScores.push(diceRoll);
+			this.setState({
+				abilityScores: abilityScores,
+			});
+		} else {
+			console.log('All abilities rolled for!');
+		}
+	};
+
+	charName = e => {
+		// console.log(e.target.value);
+		this.setState({
+			name: e.target.value,
+		});
+	};
 
 	render() {
 		return (
@@ -122,6 +145,12 @@ class App extends Component {
 				<h1>DND Character Creator</h1>
 				<CharacterCustomizer name={'Class'} onClick={this.handleClick} list={classes} />
 				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
+
+				<button>Move on to Next Step</button>
+				<Abilities onClick={this.getAbilities} abilities={this.state.abilityScores} />
+
+				<label htmlFor="name">Name</label>
+				<input onChange={this.charName} type="text" id="name" />
 			</div>
 		);
 	}

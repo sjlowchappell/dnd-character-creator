@@ -1,14 +1,14 @@
 import React from 'react';
 
-function CharacterCustomizer(props) {
+function CharacterCustomizer({ name, list, onClick }) {
 	return (
 		<div className="ClassSelect">
-			<h2>Choose a {props.name}</h2>
+			<h2>Choose a {name}</h2>
 			<ul>
-				{props.list.map(listItem => {
+				{list.map(listItem => {
 					return (
 						<li>
-							<button onClick={props.onClick} className={props.name.toLowerCase()}>
+							<button onClick={onClick} className={name.toLowerCase()}>
 								{listItem.name}
 							</button>
 						</li>
@@ -18,5 +18,4 @@ function CharacterCustomizer(props) {
 		</div>
 	);
 }
-
 export default CharacterCustomizer;
