@@ -196,12 +196,7 @@ class App extends Component {
 				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
 
-				<h2>Describe Your Character:</h2>
-				{this.state.description.map((item, index) => {
-					return <Description onChange={this.charDescription} title={item.descriptor} index={index} />;
-				})}
-
-				{/* <Description onChange={this.charDescription} title={'age'} /> */}
+				<Description descriptors={this.state.description} onChange={this.charDescription} />
 			</div>
 		);
 	}
