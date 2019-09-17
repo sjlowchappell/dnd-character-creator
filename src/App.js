@@ -1,9 +1,47 @@
 import React, { Component } from 'react';
 // import axios from 'axios';
 import './App.css';
+import CharacterCustomizer from './components/CharacterCustomizer';
 // const url = 'http://dnd5eapi.co/api/';
 
-const races = [];
+const races = [
+	{
+		name: 'Dwarf',
+		url: 'http://www.dnd5eapi.co/api/races/1',
+	},
+	{
+		name: 'Elf',
+		url: 'http://www.dnd5eapi.co/api/races/2',
+	},
+	{
+		name: 'Halfling',
+		url: 'http://www.dnd5eapi.co/api/races/3',
+	},
+	{
+		name: 'Human',
+		url: 'http://www.dnd5eapi.co/api/races/4',
+	},
+	{
+		name: 'Dragonborn',
+		url: 'http://www.dnd5eapi.co/api/races/5',
+	},
+	{
+		name: 'Gnome',
+		url: 'http://www.dnd5eapi.co/api/races/6',
+	},
+	{
+		name: 'Half-Elf',
+		url: 'http://www.dnd5eapi.co/api/races/7',
+	},
+	{
+		name: 'Half-Orc',
+		url: 'http://www.dnd5eapi.co/api/races/8',
+	},
+	{
+		name: 'Tiefling',
+		url: 'http://www.dnd5eapi.co/api/races/9',
+	},
+];
 const classes = [
 	{
 		name: 'Barbarian',
@@ -60,42 +98,30 @@ class App extends Component {
 		super();
 		this.state = {
 			name: '',
-			characterClass: '',
+			class: '',
 			race: '',
 		};
 	}
 	handleClick = e => {
-		const charClass = e.target.innerText;
-		console.log(e.target.innerText);
-		this.setState({
-			characterClass: charClass,
-		});
+		const stateName = e.target.classList.value;
+		const stateUpdate = e.target.innerText;
+		if (stateName === 'class') {
+			this.setState({
+				class: stateUpdate,
+			});
+		} else if (stateName === 'race') {
+			this.setState({
+				race: stateUpdate,
+			});
+		}
 	};
-
-	// getClassInformation(class) {
-	// 	try {
-	// 		const response = axios.get(`${url}/classes/${class}`);
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// }
 
 	render() {
 		return (
 			<div className="App">
 				<h1>DND Character Creator</h1>
-				<div>
-					<h2>Choose a Class</h2>
-					<ul>
-						{classes.map(charClass => {
-							return (
-								<li>
-									<button onClick={this.handleClick}>{charClass.name}</button>
-								</li>
-							);
-						})}
-					</ul>
-				</div>
+				<CharacterCustomizer name={'Class'} onClick={this.handleClick} list={classes} />
+				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
 			</div>
 		);
 	}
