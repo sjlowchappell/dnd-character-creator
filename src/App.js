@@ -275,6 +275,7 @@ class App extends Component {
 				<div>
 					<button onClick={this.confirmed}>Confirm Race and Class</button>
 				</div>
+				<Description descriptors={this.state.description} onChange={this.charDescription} />
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
 				<label for="levelSelect">Choose your Level:</label>
 				<select id="levelSelect" onChange={this.chooseLevel}>
@@ -299,7 +300,6 @@ class App extends Component {
 					<option value="19">Level 19</option>
 					<option value="20">Level 20</option>
 				</select>
-				<Description descriptors={this.state.description} onChange={this.charDescription} />
 			</div>
 		);
 	}
