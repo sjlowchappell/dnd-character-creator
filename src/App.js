@@ -110,7 +110,7 @@ class App extends Component {
 					proficiency_choices
 					proficiencies
 					saving_throws
-					starting_equipment
+					starting_equipment -> url to look up equipment
 					class_levels
 					spellcasting
 					url
@@ -140,18 +140,6 @@ class App extends Component {
 					url
 				*/
 			},
-			abilities: {
-				initialRolls: [],
-				totalScores: [
-					{ name: 'strength', value: 0 },
-					{ name: 'dexterity', value: 0 },
-					{ name: 'constitution', value: 0 },
-					{ name: 'intelligence', value: 0 },
-					{ name: 'wisdom', value: 0 },
-					{ name: 'charisma', value: 0 },
-				],
-				skills: [],
-			},
 			description: [
 				{ descriptor: 'name', value: '' },
 				{ descriptor: 'age', value: '' }, // desc. comes with Race
@@ -167,15 +155,28 @@ class App extends Component {
 				{ descriptor: 'flaws', value: '' },
 				{ descriptor: 'gender', value: '' },
 			],
+			abilities: {
+				initialRolls: [],
+				totalScores: [
+					{ name: 'strength', value: 0 },
+					{ name: 'dexterity', value: 0 },
+					{ name: 'constitution', value: 0 },
+					{ name: 'intelligence', value: 0 },
+					{ name: 'wisdom', value: 0 },
+					{ name: 'charisma', value: 0 },
+				],
+				skills: [],
+			},
+			proficiencies: {
+				// Combine proficiencies from race and class, and ones selected from proficiency options
+			},
 			equipment: {
+				//url from class can be used to look this up and give user choices
 				equipped: {
 					armor: '',
 					weapons: [],
 				},
 				inventory: {},
-			},
-			proficiencies: {
-				// Combine proficiencies from race and class, and ones selected from proficiency options
 			},
 			hp: 0,
 			xp: 0,
@@ -205,24 +206,6 @@ class App extends Component {
 			console.log('All abilities rolled for!');
 		}
 	};
-	calculateBaseAbilities = () => {
-		const raceScores = this.state.race.ability_bonuses;
-		const totals = this.state.abilities.totalScores;
-		let i = 0;
-		totals.forEach(score => {
-			score.value = score.value + raceScores[i];
-			i++;
-		});
-		this.setState({
-			[totals]: totals,
-		});
-	};
-
-	charName = e => {
-		this.setState({
-			name: e.target.value,
-		});
-	};
 	confirmed = () => {
 		try {
 			const classInfo = axios.get(this.state.class.url);
@@ -241,6 +224,27 @@ class App extends Component {
 			console.log(err);
 		}
 	};
+	calculateBaseAbilities = () => {
+		const raceScores = this.state.race.ability_bonuses;
+		const totals = this.state.abilities.totalScores;
+		let i = 0;
+		totals.forEach(score => {
+			score.value = score.value + raceScores[i];
+			i++;
+		});
+		this.setState({
+			abilities: {
+				totalScores: totals,
+				initialRolls: [],
+				skills: [],
+			},
+		});
+	};
+	charName = e => {
+		this.setState({
+			name: e.target.value,
+		});
+	};
 	charDescription = e => {
 		const description = this.state.description;
 		const index = e.target.parentElement.getAttribute('data-index');
@@ -251,7 +255,6 @@ class App extends Component {
 			description: description,
 		});
 	};
-
 	chooseLevel = e => {
 		console.log(e.target.value);
 		const level = e.target.value;
