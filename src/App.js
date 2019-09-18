@@ -277,7 +277,7 @@ class App extends Component {
 				</div>
 				<Description descriptors={this.state.description} onChange={this.charDescription} />
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
-				<label for="levelSelect">Choose your Level:</label>
+				<label htmlFor="levelSelect">Choose your Level:</label>
 				<select id="levelSelect" onChange={this.chooseLevel}>
 					<option value="1">Level 1</option>
 					<option value="2">Level 2</option>
@@ -300,9 +300,23 @@ class App extends Component {
 					<option value="19">Level 19</option>
 					<option value="20">Level 20</option>
 				</select>
+
+				<h2>Choose Additional Proficiencies and Skills</h2>
+				<h2>Choose Equipment</h2>
+				<h2>Roll for Hit Points</h2>
 			</div>
 		);
 	}
 }
 
 export default App;
+
+/*
+Todo: 
+	1) Make a call to get features/traits/abilities based on level of character
+	2) Create a Choose Proficiciencies/Skills component
+	3) Make a call to get equipment based on class
+	4) Create a Choose Equipment Component
+	5) Render character sheet on Screen
+	6) Add any additional rolls (hit points) to abilities section
+*/
