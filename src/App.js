@@ -102,10 +102,43 @@ class App extends Component {
 			class: {
 				name: '',
 				url: '',
+				// Includes:
+				/* 
+					name
+					index
+					hit_die
+					proficiency_choices
+					proficiencies
+					saving_throws
+					starting_equipment
+					class_levels
+					spellcasting
+					url
+				*/
+				// Add a level option (dropdown, choose 1 - 20)
+				// Make a call to get features based on paladin level, filter out unique objects
 			},
 			race: {
 				name: '',
 				url: '',
+				// Includes:
+				/* 
+					name
+					index
+					speed
+					ability_bonuses
+					alignment description
+					age description
+					size
+					size description
+					starting_proficiencies
+					starting_proficiency_options
+					languages
+					language_desc
+					traits
+					subraces
+					url
+				*/
 			},
 			abilities: {
 				initialRolls: [],
@@ -121,11 +154,12 @@ class App extends Component {
 			},
 			description: [
 				{ descriptor: 'name', value: '' },
-				{ descriptor: 'age', value: '' },
+				{ descriptor: 'age', value: '' }, // desc. comes with Race
 				{ descriptor: 'eyes', value: '' },
+				{ descriptor: 'height', value: '' }, // desc. comes with Race
 				{ descriptor: 'weight', value: '' },
 				{ descriptor: 'hair', value: '' },
-				{ descriptor: 'alignment', value: '' },
+				{ descriptor: 'alignment', value: '' }, // desc. comes with Race
 				{ descriptor: 'background', value: '' },
 				{ descriptor: 'traits', value: '' },
 				{ descriptor: 'ideals', value: '' },
@@ -140,11 +174,8 @@ class App extends Component {
 				},
 				inventory: {},
 			},
-			misc: {
-				otherProficiencies: [],
-				languages: [],
-				features: [],
-				traits: [],
+			proficiencies: {
+				// Combine proficiencies from race and class, and ones selected from proficiency options
 			},
 			hp: 0,
 			xp: 0,
@@ -174,6 +205,19 @@ class App extends Component {
 			console.log('All abilities rolled for!');
 		}
 	};
+	calculateBaseAbilities = () => {
+		const raceScores = this.state.race.ability_bonuses;
+		const totals = this.state.abilities.totalScores;
+		let i = 0;
+		totals.forEach(score => {
+			score.value = score.value + raceScores[i];
+			i++;
+		});
+		this.setState({
+			[totals]: totals,
+		});
+	};
+
 	charName = e => {
 		this.setState({
 			name: e.target.value,
@@ -184,12 +228,14 @@ class App extends Component {
 			const classInfo = axios.get(this.state.class.url);
 			const raceInfo = axios.get(this.state.race.url);
 			Promise.all([classInfo, raceInfo]).then(res => {
-				console.log(res[0].data);
-				console.log(res[1].data);
+				const proficiencies = [];
+				proficiencies.push([...res[0].data.proficiencies, ...res[1].data.starting_proficiencies]);
 				this.setState({
 					class: res[0].data,
 					race: res[1].data,
+					proficiencies: proficiencies,
 				});
+				this.calculateBaseAbilities();
 			});
 		} catch (err) {
 			console.log(err);
@@ -206,6 +252,17 @@ class App extends Component {
 		});
 	};
 
+	chooseLevel = e => {
+		console.log(e.target.value);
+		const level = e.target.value;
+		this.setState(prevState => ({
+			class: {
+				...prevState.class,
+				level: level,
+			},
+		}));
+	};
+
 	render() {
 		return (
 			<div className="App">
@@ -216,6 +273,29 @@ class App extends Component {
 					<button onClick={this.confirmed}>Confirm Race and Class</button>
 				</div>
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
+				<label for="levelSelect">Choose your Level:</label>
+				<select id="levelSelect" onChange={this.chooseLevel}>
+					<option value="1">Level 1</option>
+					<option value="2">Level 2</option>
+					<option value="3">Level 3</option>
+					<option value="4">Level 4</option>
+					<option value="5">Level 5</option>
+					<option value="6">Level 6</option>
+					<option value="7">Level 7</option>
+					<option value="8">Level 8</option>
+					<option value="9">Level 9</option>
+					<option value="10">Level 10</option>
+					<option value="11">Level 11</option>
+					<option value="12">Level 12</option>
+					<option value="13">Level 13</option>
+					<option value="14">Level 14</option>
+					<option value="15">Level 15</option>
+					<option value="16">Level 16</option>
+					<option value="17">Level 17</option>
+					<option value="18">Level 18</option>
+					<option value="19">Level 19</option>
+					<option value="20">Level 20</option>
+				</select>
 				<Description descriptors={this.state.description} onChange={this.charDescription} />
 			</div>
 		);
