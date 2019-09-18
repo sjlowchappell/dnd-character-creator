@@ -130,6 +130,7 @@ class App extends Component {
 				{ descriptor: 'ideals', value: '' },
 				{ descriptor: 'bonds', value: '' },
 				{ descriptor: 'flaws', value: '' },
+				{ descriptor: 'gender', value: '' },
 			],
 			equipment: {
 				equipped: {
@@ -171,11 +172,16 @@ class App extends Component {
 			console.log('All abilities rolled for!');
 		}
 	};
-
 	charName = e => {
 		this.setState({
 			name: e.target.value,
 		});
+	};
+	confirmed = () => {
+		// // Make axios call to get class info
+		// const getClass = () => {};
+		// // Make axios call to get race info
+		// const getRace = () => {};
 	};
 	charDescription = e => {
 		const description = this.state.description;
@@ -194,8 +200,10 @@ class App extends Component {
 				<h1>DND Character Creator</h1>
 				<CharacterCustomizer name={'Class'} onClick={this.handleClick} list={classes} />
 				<CharacterCustomizer name={'Race'} onClick={this.handleClick} list={races} />
+				<div>
+					<button onClick={this.confirmed}>Confirm Race and Class</button>
+				</div>
 				<Abilities onClick={this.getAbilities} abilities={this.state.abilities.initialRolls} />
-
 				<Description descriptors={this.state.description} onChange={this.charDescription} />
 			</div>
 		);
