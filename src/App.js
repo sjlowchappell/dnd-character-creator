@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import './App.css';
 import CharacterCustomizer from './components/CharacterCustomizer';
 import Abilities from './components/Abilities';
@@ -101,10 +101,11 @@ class App extends Component {
 		this.state = {
 			class: {
 				name: '',
-				level: {},
+				url: '',
 			},
 			race: {
 				name: '',
+				url: '',
 			},
 			abilities: {
 				initialRolls: [],
@@ -151,10 +152,12 @@ class App extends Component {
 		};
 	}
 	handleClick = e => {
-		const stateName = e.target.classList.value;
-		const stateUpdate = e.target.innerText;
+		console.log(e.target);
+		const stateKey = e.target.classList.value;
+		const name = e.target.innerText;
+		const url = e.target.dataset.url;
 		this.setState({
-			[stateName]: { name: stateUpdate },
+			[stateKey]: { name: name, url: url },
 		});
 	};
 	getAbilities = () => {
@@ -177,12 +180,18 @@ class App extends Component {
 			name: e.target.value,
 		});
 	};
-	confirmed = () => {
-		// // Make axios call to get class info
-		// const getClass = () => {};
-		// // Make axios call to get race info
-		// const getRace = () => {};
-	};
+	// confirmed = () => {
+	// 	try {
+	// 		// const classInfo = axios.get(this.state.class.url);
+	// 		// const raceInfo = axios.get(this.state.race.url);
+	// 		// this.setState({
+	// 		// 	class: classInfo,
+	// 		// 	race: raceInfo,
+	// 		// });
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// };
 	charDescription = e => {
 		const description = this.state.description;
 		const index = e.target.parentElement.getAttribute('data-index');
