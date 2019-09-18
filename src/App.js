@@ -152,7 +152,6 @@ class App extends Component {
 		};
 	}
 	handleClick = e => {
-		console.log(e.target);
 		const stateKey = e.target.classList.value;
 		const name = e.target.innerText;
 		const url = e.target.dataset.url;
@@ -180,18 +179,22 @@ class App extends Component {
 			name: e.target.value,
 		});
 	};
-	// confirmed = () => {
-	// 	try {
-	// 		// const classInfo = axios.get(this.state.class.url);
-	// 		// const raceInfo = axios.get(this.state.race.url);
-	// 		// this.setState({
-	// 		// 	class: classInfo,
-	// 		// 	race: raceInfo,
-	// 		// });
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
+	confirmed = () => {
+		try {
+			const classInfo = axios.get(this.state.class.url);
+			const raceInfo = axios.get(this.state.race.url);
+			Promise.all([classInfo, raceInfo]).then(res => {
+				console.log(res[0].data);
+				console.log(res[1].data);
+				this.setState({
+					class: res[0].data,
+					race: res[1].data,
+				});
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
 	charDescription = e => {
 		const description = this.state.description;
 		const index = e.target.parentElement.getAttribute('data-index');
