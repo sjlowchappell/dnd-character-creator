@@ -7,7 +7,7 @@ function CharacterCustomizer({ name, list, onClick }) {
 			<ul>
 				{list.map(listItem => {
 					return (
-						<li>
+						<li key={listItem.url}>
 							<button onClick={onClick} className={name.toLowerCase()} data-url={listItem.url}>
 								{listItem.name}
 							</button>

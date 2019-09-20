@@ -8,11 +8,17 @@ function Equipment({ equipment }) {
 		equipmentChoices.push(
 			<div>
 				<h3>Choice {i}:</h3>
-				<p>
-					{equipment[currentChoice].map(choice => {
-						return <Choose choices={choice} />;
+				<div className="infoBox">
+					{equipment[currentChoice].map((choice, index) => {
+						return (
+							<div>
+								<label>Option {index + 1} </label>
+								<input type="radio" name={currentChoice} />
+								<Choose choices={choice} />
+							</div>
+						);
 					})}
-				</p>
+				</div>
 			</div>,
 		);
 	}
